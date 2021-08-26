@@ -94,18 +94,24 @@
 35 8 * * * node /scripts/jd_ldhwj.js >> /scripts/logs/jd_ldhwj.log 2>&1
 #京东手机狂欢城
 0 0-18/6 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
+#京东手机狂欢城助力
+10 0,8 * * * node /scripts/jd_carnivalcity_help.js >> /scripts/logs/jd_carnivalcity_help.log 2>&1
 #金机奖投票
-33 4,7 8-20 8 * node /scripts/jd_golden_machine.js >> /scripts/logs/jd_golden_machine.log 2>&1
-#家电815周年庆礼包
-54 5 9-15 8 * node /scripts/jd_appliances.js >> /scripts/logs/jd_appliances.log 2>&1
-#热血心跳,狂解压
-5 6,8 12-24 8 * node /scripts/jd_decompression.js >> /scripts/logs/jd_decompression.log 2>&1
-#明星小店
-10 9,18 9-25 8 * node /scripts/jd_star_shop.js >> /scripts/logs/jd_star_shop.log 2>&1
+#33 4,7 8-20 8 * node /scripts/jd_golden_machine.js >> /scripts/logs/jd_golden_machine.log 2>&1
+##家电815周年庆礼包
+#54 5 9-15 8 * node /scripts/jd_appliances.js >> /scripts/logs/jd_appliances.log 2>&1
+##热血心跳,狂解压
+5 6,8 * * * node /scripts/jd_decompression.js >> /scripts/logs/jd_decompression.log 2>&1
+##明星小店
+#10 9,18 9-25 8 * node /scripts/jd_star_shop.js >> /scripts/logs/jd_star_shop.log 2>&1
 #小米-星空大冒险
 31 8,22 13-31 8 * node /scripts/jd_xmGame.js >> /scripts/logs/jd_xmGame.log 2>&1
 #骁龙品牌日
 18 9,19 13-25 8 * node /scripts/jd_xiaolong.js >> /scripts/logs/jd_xiaolong.log 2>&1
+#京东工业品抽奖
+#10 7 17,18 8 * node /scripts/jd_industryLottery.js >> /scripts/logs/jd_industryLottery.log 2>&1
+#王者荣耀投票
+23 8,9 22-31,1-5 8,9 * node /scripts/jd_king.js >> /scripts/logs/jd_king.log 2>&1
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -232,6 +238,8 @@
 58 23,7,15 * * * node /scripts/jd_task_validate.js >> /scripts/logs/jd_task_validate.log 2>&1
 #签到领现金兑换
 0 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
+#领券中心
+15 0 * * * node /scripts/jd_ccSign.js >> /scripts/logs/jd_ccSign.log 2>&1
 ##############默认注释活动##############
 # 京东试用（默认注释，请配合取关脚本使用）
 10 0 * * *  node /scripts/jd_try.js >> /scripts/logs/jd_try.log 2>&1
