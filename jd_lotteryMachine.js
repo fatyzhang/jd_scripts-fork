@@ -1,6 +1,6 @@
 /*
 京东抽奖机
-更新时间：2021-08-09 14:30
+更新时间：2021-09-17 14:00
 脚本说明：抽奖活动,有新活动可以@我或者提Issues
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 // quantumultx
@@ -15,7 +15,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const STRSPLIT = "|";
 const needSum = false;            //是否需要显示汇总
 const printDetail = false;        //是否显示出参详情
-const appIdArr =['1EFRRxA','1EFRQwA','1E1NYwqc','1EFRXxg','1EFVRxg','1E1NYw6w','1E1xRy6c','1E1xVyqw']
+const appIdArr =['1EFRRxA','1EFRQwA','1E1NYwqc','1EFRXxg','1EFVRxg','1E1NYw6w','1E1xRy6c','1E1xVyqw','1E1NXxq0', '1ElBTx6o', '1ElJYxqY']
 const shareCodeArr = ['T018v_VxQxkZ_FXVJBqb1ACjVWmIaW5kRrbA','T018v_VxQxkZ_FXVJBqb1ACjVXnIaW5kRrbA','T018v_VxQxkZ_FXVJBqb1ACTJfnqS7zDcjeQOc','T018v_VxQxkZ_FXVJBqb1ACjVQmoaT5kRrbA','T018v_VxQxkZ_FXVJBqb1ACTJfn6-7zDQjeQOc','T018v_VxQxkZ_FXVJBqb1ACT1Wl6S7xR55awQ']
 const homeDataFunPrefixArr = ['interact_template','interact_template','harmony_template','','','','','','','','','','interact_template','interact_template']
 const collectScoreFunPrefixArr = ['','','','','','','','','','','','','interact_template','interact_template']
@@ -158,7 +158,7 @@ function interact_template_getHomeData(timeout = 0) {
               await interact_template_getLotteryResult(data.data.result.taskVos[i].taskId);
               continue;
             }
-            if ([0,13].includes(data.data.result.taskVos[i].taskType)) {
+            if ([0,13,12].includes(data.data.result.taskVos[i].taskType)) {
               if (data.data.result.taskVos[i].status === 1) {
                 await harmony_collectScore(data.data.result.taskVos[i].simpleRecordInfoVo.taskToken,data.data.result.taskVos[i].taskId);
               }
