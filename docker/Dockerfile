@@ -1,4 +1,4 @@
-FROM node:lts-alpine3.13
+FROM node:lts-alpine3.14
 
 LABEL AUTHOR="none" \
       VERSION=0.1.4
