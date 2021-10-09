@@ -1,22 +1,6 @@
 /*
-脚本：清空购物车
-更新时间：2021-07-24
-因其他脚本会加入商品到购物车，故此脚本用来取消清空购物车
-默认：每运行一次脚本清空购物车所有商品
-建议此脚本运行时间在 其他脚本运行之后 再执行
-
-脚本兼容: Quantumult X, Surge, Loon, JSBox, Node.js, 小火箭
-==============Quantumult X===========
-[task_local]
-#清空购物车
-55 17 * * * jd_cleancart.js, tag=清空购物车, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-===========Loon============
-[Script]
-cron "55 17 * * *" script-path=jd_cleancart.js,tag=清空购物车
-============Surge=============
-清空购物车 = type=cron,cronexp="55 17 * * *",wake-system=1,timeout=3600,script-path=jd_cleancart.js
-===========小火箭========
-清空购物车 = type=cron,script-path=jd_cleancart.js, cronexpr="55 17 * * *", timeout=3600, enable=true
+清空购物车
+cron "1 1 * * *"jd_cleancart.js
  */
 const $ = new Env('清空购物车');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -24,12 +8,13 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '',allMessage = '';
+let cookiesArr = [], cookie = '', allMessage = '', users = '';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
+    users = process.env.CleanUsers ? process.env.CleanUsers : '';
 } else {
     cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -37,10 +22,15 @@ if ($.isNode()) {
     if (!cookiesArr[0]) {
         $.msg('【京东账号一】清空购物车失败', '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     }
+    console.log("将需要跳过清理的账号(cookie中的pt_pin)放到变量CleanUsers中，多个用@隔开\n")
+    console.log("❗️❗️❗️❗️本脚本会清理购物车所有商品❗️❗️❗️❗️\n")
+    console.log("脚本十秒后开始清理\n")
+    await sleep(10 * 1000)
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
-            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+            $.User = cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]
+            $.UserName = decodeURIComponent($.User)
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
@@ -53,20 +43,32 @@ if ($.isNode()) {
                     await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
                 continue
+            } else if (users.indexOf($.User) > -1) {
+                console.log(`❗️❗️账号在变量中，跳过此账号\n`);
+                continue
             }
             allMessage += `京东账号${$.index} - ${$.nickName}\n`;
             await getCarts();
             allMessage += `购物车商品数：${$.cartsTotalNum}\n`;
             if ($.cartsTotalNum > 0) {
-                await unsubscribeCartsFun();
+                for (let i = 0; i < 3; i++) {
+                    await unsubscribeCartsFun();
+                    await getCarts();
+                    if ($.cartsTotalNum == 0) { break }
+                    await sleep(3000)
+                }
+                if ($.cartsTotalNum > 0) {
+                    allMessage += `清空结果：❌\n`;
+                } else {
+                    allMessage += `清空结果：✅\n`;
+                }
             }
             allMessage += '\n'
         }
     }
     if (allMessage) {
-        allMessage = allMessage.substring(0,allMessage.length - 1)
+        allMessage = allMessage.substring(0, allMessage.length - 1)
         if ($.isNode() && (process.env.CASH_NOTIFY_CONTROL ? process.env.CASH_NOTIFY_CONTROL === 'false' : !!1)) await notify.sendNotify($.name, allMessage);
-        $.msg($.name, '', allMessage);
     }
 })()
     .catch((e) => {
@@ -75,7 +77,9 @@ if ($.isNode()) {
     .finally(() => {
         $.done();
     })
-
+function sleep(timeout) {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+}
 function unsubscribeCartsFun() {
     return new Promise(resolve => {
 
@@ -96,13 +100,9 @@ function unsubscribeCartsFun() {
         $.post(options, (err, resp, data) => {
             try {
                 data = JSON.parse(data);
-                if (data['errId'] == '0') {
-                    allMessage += `清空结果：✅\n`;
-                }else{
-                    allMessage += `清空结果：❌\n`;
-                }
+                if (data['errId'] == '0') { console.log('清空购物车成功') }
             } catch (e) {
-                allMessage += `清空结果：❌\n`;
+                console.log('清空购物车出错')
                 $.logErr(e, resp);
             } finally {
                 resolve(data);
