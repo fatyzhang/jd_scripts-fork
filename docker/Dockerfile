@@ -24,6 +24,7 @@ RUN set -ex \
 	&& python3 -m pip install requests \
     && npm config set registry https://registry.npm.taobao.org \
     && npm install \
+	&& npm install -g typescript \
 	&& chmod +x /scripts/docker/*.sh \
     && cp /scripts/docker/docker_entrypoint.sh /usr/local/bin \
     && chmod +x /usr/local/bin/docker_entrypoint.sh
