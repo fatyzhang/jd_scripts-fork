@@ -8,11 +8,11 @@
 ============Quantumultx===============
 [task_local]
 # 京东赚赚
-10 3 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdzz.js, tag=京东赚赚, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdzz.png, enabled=true
+10 0 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdzz.js, tag=京东赚赚, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdzz.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "10 3 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdzz.js,tag=京东赚赚
+cron "10 0 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdzz.js,tag=京东赚赚
 
 ===============Surge=================
 京东赚赚 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdzz.js
@@ -39,7 +39,9 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-const inviteCodes = ['']
+const inviteCodes = [
+''
+]
 let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000);
 !(async () => {
   await requireConfig();
@@ -90,7 +92,7 @@ async function jdWish() {
   $.assistStatus = 0;
   await getTaskList(true)
 
-  //await helpFriends()
+  await helpFriends()
   await getUserInfo()
   $.nowBean = parseInt($.totalBeanNum)
   $.nowNum = parseInt($.totalNum)
@@ -139,11 +141,11 @@ function getUserInfo() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-             if (data.data.shareTaskRes) {
-               console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）的${$.name}好友互助码】${data.data.shareTaskRes.itemId}\n`);
-             } else {
-               console.log(`\n\n已满5人助力或助力功能已下线,故暂时无${$.name}好友助力码\n\n`)
-             }
+            // if (data.data.shareTaskRes) {
+            //   console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）的${$.name}好友互助码】${data.data.shareTaskRes.itemId}\n`);
+            // } else {
+            //   console.log(`\n\n已满5人助力或助力功能已下线,故暂时无${$.name}好友助力码\n\n`)
+            // }
           }
         }
       } catch (e) {
@@ -225,11 +227,11 @@ async function helpFriends() {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: ``, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://code.chiang.fun/api/v1/jd/jdzz/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
-         // console.log(`${JSON.stringify(err)}`)
-         // console.log(`${$.name} API请求失败，请检查网路重试`)
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)

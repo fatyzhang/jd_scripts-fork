@@ -6,17 +6,17 @@
 ============Quantumultx===============
 [task_local]
 #内容鉴赏官
-15 3,15 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js, tag=内容鉴赏官, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+15 3,6 * * * jd_connoisseur.js, tag=内容鉴赏官, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "15 3,15 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js,tag=内容鉴赏官
+cron "15 3,6 * * *" script-path=jd_connoisseur.js,tag=内容鉴赏官
 
 ===============Surge=================
-内容鉴赏官 = type=cron,cronexp="15 3,15 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js
+内容鉴赏官 = type=cron,cronexp="15 3,6 * * *",wake-system=1,timeout=3600,script-path=jd_connoisseur.js
 
 ============小火箭=========
-内容鉴赏官 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js, cronexpr="15 3,15 * * *", timeout=3600, enable=true
+内容鉴赏官 = type=cron,script-path=jd_connoisseur.js, cronexpr="15 3,6 * * *", timeout=3600, enable=true
  */
 const $ = new Env('内容鉴赏官');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -43,12 +43,7 @@ let allMessage = '';
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/connoisseur.json')
-    if (!res) {
-        $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/connoisseur.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-        await $.wait(1000)
-        res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/connoisseur.json')
-    }
+    let res = [{"use":"18237091240_p","code":"Sv_VxQxkZ_FXVJBqb1A"},{"use":"pluto.5218_m","code":"S_qE2BEEH8FbWKHWp"}, {"use":"jd_50f2be46743fc","code":"S5KkcRR5P9waCJBzzkPRcJw"},{"use":"15082992273_p","code":"Sv_hzSBwQ_FbVJxmb1A"},{"use":"jd_680c996309fbf","code":"S5KkcRhYZpl3eJhn0naFYIg"},{"use":"jd_5cd15c4b0807c","code":"S5KkcRU1N9FGEJEj0nPcNJw"},{"use":"jd_TTcYfwuzDbnh","code":"S5KkcJHpKnAKQZVCAxqlS"},{"use":"%E6%B8%B8%E6%9E%97yl","code":"SaHX7lrC-vAg"},{"use":"jd_544cacc7b14ef","code":"S5KkcRRodpgWEcx2mlfNfIg"},{"use":"313333079-954679","code":"SvfxwQx0a9VPePRPxkPENfQ"}]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -187,7 +182,7 @@ async function getTaskInfo(type, projectId, assignmentId, helpType = '1', itemId
                                     } else {
                                         console.log(assignmentId === "2PbAu1BAT79RxrM5V7c2VAPUQDSd" ? `今日已签到` : `任务已完成`)
                                     }
-                                } else {
+                                }  else {
                                     console.log(`无当前任务`)
                                 }
                             } else {
@@ -197,7 +192,7 @@ async function getTaskInfo(type, projectId, assignmentId, helpType = '1', itemId
                             if (data.code === "0" && data.data) {
                                 if (data.data[0].status !== "2") {
                                     await sign_interactive_done(type, data.data[0].projectId, data.data[0].assignmentId)
-                                    await $.wait((data.data[0].waitDuration * 1000) || 2000)
+                                    await $.wait(2000)
                                     await interactive_reward(type, data.data[0].projectId, data.data[0].assignmentId)
                                 } else {
                                     console.log(`任务已完成`)
@@ -210,7 +205,7 @@ async function getTaskInfo(type, projectId, assignmentId, helpType = '1', itemId
                                 console.log(`去做【${data.data[0].title}】`)
                                 if (data.data[0].status !== "2") {
                                     await interactive_accept(type, data.data[0].projectId, data.data[0].assignmentId, data.data[0].itemId)
-                                    await $.wait((data.data[0].waitDuration * 1000) || 2000)
+                                    await $.wait(data.data[0].waitDuration)
                                     await qryViewkitCallbackResult(data.data[0].projectId, data.data[0].assignmentId, data.data[0].itemId)
                                 } else {
                                     console.log(`任务已完成`)
@@ -274,14 +269,14 @@ function interactive_done(type, projectId, assignmentId, itemId) {
                     if (data) {
                         data = JSON.parse(data)
                         if (type === "2") {
-                            if (data.code === "0" && data.busiCode === "0") {
+                            if (data.code === "0") {
                                 console.log(data.data.msg)
                                 if (!data.data.success) $.canHelp = false
                             } else {
                                 console.log(data.message)
                             }
                         } else {
-                            if (data.code === "0" && data.busiCode === "0") {
+                            if (data.code === "0") {
                                 console.log(data.data.rewardMsg)
                             } else {
                                 console.log(data.message)
@@ -332,7 +327,7 @@ function interactive_reward(type, projectId, assignmentId) {
                 } else {
                     if (data) {
                         data = JSON.parse(data)
-                        if (data.code === "0" && data.busiCode === "0") {
+                        if (data.code === "0") {
                             console.log(data.data.rewardMsg)
                         } else {
                             console.log(data.message)
@@ -382,9 +377,7 @@ async function qryViewkitCallbackResult(encryptProjectId, encryptAssignmentId, i
                 } else {
                     if (data) {
                         data = JSON.parse(data)
-                        if (data.code === "0" || data.msg === "query success!") {
-                            console.log(`恭喜获得2个京豆`)
-                        }
+                        console.log(`恭喜获得2个京豆`)
                     }
                 }
             } catch (e) {

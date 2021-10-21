@@ -1,5 +1,5 @@
 /*
-东东超市兑换奖品 脚本地址：https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_blueCoin.js
+东东超市兑换奖品 脚本地址：jd_blueCoin.js
 感谢@yangtingxiao提供PR
 更新时间：2021-6-7
 活动入口：京东APP我的-更多工具-东东超市
@@ -8,17 +8,14 @@
 ============QuantumultX==============
 [task_local]
 #东东超市兑换奖品
-59 23 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_blueCoin.js, tag=东东超市兑换奖品, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxc.png, enabled=true
-
+59 23 * * * jd_blueCoin.js, tag=东东超市兑换奖品, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxc.png, enabled=true
 ====================Loon=================
 [Script]
-cron "59 23 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_blueCoin.js,tag=东东超市兑换奖品
-
+cron "59 23 * * *" script-path=jd_blueCoin.js,tag=东东超市兑换奖品
 ===================Surge==================
-东东超市兑换奖品 = type=cron,cronexp="59 23 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_blueCoin.js
-
+东东超市兑换奖品 = type=cron,cronexp="59 23 * * *",wake-system=1,timeout=3600,script-path=jd_blueCoin.js
 ============小火箭=========
-东东超市兑换奖品 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_blueCoin.js, cronexpr="59 23 * * *", timeout=3600, enable=true
+东东超市兑换奖品 = type=cron,script-path=jd_blueCoin.js, cronexpr="59 23 * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东超市兑换奖品');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -108,8 +105,8 @@ Date.prototype.Format = function (fmt) { //author: meizz
     await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
-  .catch((e) => $.logErr(e))
-  .finally(() => $.done())
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
 
 async function PrizeIndex() {
   let nowtime = new Date().Format("s.S")
@@ -150,7 +147,7 @@ async function PrizeIndex() {
       if ($.totalBlue > $.blueCost) {
         for (let j = 0; j <= 10; j++) {
           await smtg_obtainPrize(prizeList[1].prizeId);
-          if ($.errBizCodeCount >= 20) break
+          if ($.errBizCodeCount >= 3) break
         }
       } else {
         console.log(`兑换失败,您目前蓝币${$.totalBlue}个,不足以兑换${$.title}所需的${$.blueCost}个`);
@@ -179,7 +176,7 @@ async function PrizeIndex() {
       if ($.totalBlue > $.blueCost) {
         for (let j = 0; j <= 10; j++) {
           await smtg_obtainPrize(prizeList[0].prizeId, 1000);
-          if ($.errBizCodeCount >= 20) break
+          if ($.errBizCodeCount >= 3) break
         }
       } else {
         console.log(`兑换失败,您目前蓝币${$.totalBlue}个,不足以兑换${$.title}所需的${$.blueCost}个`);
@@ -213,12 +210,12 @@ async function PrizeIndex() {
           if ($.type === 4 && !$.beanType) {
             for (let j = 0; j <= 10; j++) {
               await smtg_obtainPrize(prizeId, 0, "smtg_lockMaterialPrize")
-              if ($.errBizCodeCount >= 20) break
+              if ($.errBizCodeCount >= 3) break
             }
           } else {
             for (let j = 0; j <= 10; j++) {
               await smtg_obtainPrize(prizeId);
-              if ($.errBizCodeCount >= 20) break
+              if ($.errBizCodeCount >= 3) break
             }
           }
         } else {

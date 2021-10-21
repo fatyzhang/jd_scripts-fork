@@ -2,7 +2,17 @@
 小鸽有礼 - 每日抽奖
 活动入口：京东首页搜索 边玩边赚
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-cron "21 2,15,19 * * *" jd_daily_lottery.js
+===================quantumultx================
+[task_local]
+#每日抽奖
+13 1,22,23 * * * jd_daily_lottery.js, tag=每日抽奖, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+=====================Loon================
+[Script]
+cron "13 1,22,23 * * *" script-path=jd_daily_lottery.js, tag=每日抽奖
+====================Surge================
+每日抽奖 = type=cron,cronexp="13 1,22,23 * * *",wake-system=1,timeout=3600,script-path=jd_daily_lottery.js
+============小火箭=========
+每日抽奖 = type=cron,script-path=jd_daily_lottery.js, cronexpr="13 1,22,23 * * *", timeout=3600, enable=true
 */
 const $ = new Env('小鸽有礼-每日抽奖');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -88,12 +98,12 @@ let allMessage = '';
     notify.sendNotify('小哥有礼-每日抽奖',allMessage);
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
+    .catch((e) => {
+      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+    })
+    .finally(() => {
+      $.done();
+    })
 
 async function dailyLottery() {
   $.lotteryInfo = {};
@@ -216,15 +226,15 @@ function dealReturn(functionId, data) {
         let bean = 0;
         for (let i = 0; i < contentList.length; i++) {
           if(contentList[i].type === -2 || //快递券
-            contentList[i].type === 4 ||  //维修券
-            contentList[i].type === 3 ||  //郎酒满减券
-            contentList[i].type === 2 ||  //满减券
-            contentList[i].type === 31   //卡片
+              contentList[i].type === 4 ||  //维修券
+              contentList[i].type === 3 ||  //郎酒满减券
+              contentList[i].type === 2 ||  //满减券
+              contentList[i].type === 31   //卡片
           ){
 
 
           }else if(contentList[i].type === 102){
-              bean += 2;
+            bean += 2;
           }else{
             console.log(contentList[i].name);
             allMessage += `第${$.index}个账号，${$.UserName},获得:${contentList[i].name}\n`;

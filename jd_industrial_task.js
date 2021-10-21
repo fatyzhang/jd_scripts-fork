@@ -1,7 +1,7 @@
 /*
 京东工业品任务
 做完任务有4豆。要跑至少2次。
-cron 13 4,15 * * * https://raw.githubusercontent.com/ickel00/gd_test/main/jd_industrial_task.js
+cron 13 5,16 * * * jd_industrial_task.js
  */
 const $ = new Env('京东工业品');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -96,7 +96,7 @@ function get_tasklist(code) {
                                 itemName = vo.item.itemName
                                 itemId = vo.item.itemId
                                 groupType = vo.groupType
-                                if (groupType == 2 && !['card','car'].includes(process.env.FS_LEVEL)) {
+                                if (groupType == 2 && ['card','car'].includes(process.env.FS_LEVEL)) {
                                     console.log("默认不加购,请设置通用加购变量FS_LEVEL=car")
                                     continue
                                 }
