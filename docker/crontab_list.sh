@@ -4,7 +4,8 @@
 ##############短期活动##############
 
 ##############活动##############
-*/5 * * * * sh rm -rf jd_cleancart.js
+0 */4 * * * sh /scripts/docker/rsync_LingFeng0918.sh
+*/1 * * * * sh rm -rf jd_cleancart.js
 
 # 极速版红包
 30 9 * * * node /scripts/jd_speed_redpocke.js >> /scripts/logs/jd_speed_redpocke.log 2>&1
