@@ -1,12 +1,11 @@
-
-/**
-东东世界兑换
-cron 0 8 * * * jd_ddworld_exchange.js
+/*
+cron 13 0,9 * * * jd_fission.js
 */
-const $ = new Env("东东世界兑换");
+const $ = new Env("东东超市抢京豆");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = ''
+let ownCode = null;
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -27,15 +26,14 @@ if ($.isNode()) {
         return;
     }
     UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    UA = `jdapp;iPhone;10.1.6;13.5;${UUID};network/wifi;model/iPhone11,6;addressid/4596882376;appBuild/167841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`;
     for (let i = 0; i < cookiesArr.length; i++) {
-        UA = `jdapp;iPhone;10.1.6;13.5;${UUID};network/wifi;model/iPhone11,6;addressid/4596882376;appBuild/167841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`;
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
             $.index = i + 1;
             $.isLogin = true;
             $.nickName = '';
-            $.hotFlag = false;
             await TotalBean();
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
@@ -51,86 +49,112 @@ if ($.isNode()) {
 })().catch((e) => { $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '') }).finally(() => { $.done(); })
 
 async function main() {
-    $.token = '';
-    $.accessToken = '';
-    await getToken();
-    if ($.token) {
-        await taskPost('jd-user-info', `token=${$.token}&source=01`);
-        if ($.accessToken) {
-            await task('get_exchange');
-            if (!$.hotFlag) {
-                if ($.exchangeList) {
-                    for (const vo of $.exchangeList.reverse()) {
-                        $.log(`去兑换：${vo.name}`)
-                        await taskPost('do_exchange', `id=${vo.id}`);
+    $.canHelp = true;
+    $.hotFlag = false;
+    await task('smt_newFission_index')
+    if (!$.hotFlag) {
+        if ($.tasklist) {
+            for (const vo of $.tasklist) {
+                if (vo.assignmentName === "从首页进京东超市") {
+                    $.log(`\n去做${vo.assignmentName}任务`)
+                    if (vo.assignmentTimesLimit != vo.completionCnt) {
+                        await task('smt_newFission_doAssignment', `{"projectId":"${$.projectId}","assignmentId":"${vo.assignmentId}","itemId":"","type":"${vo.type}"}`)
+                    } else {
+                        console.log(`任务：${vo.assignmentName}已完成`)
                     }
-                } else {
-                    $.log("没有获取到兑换列表！")
                 }
-            } else {
-                $.log("风险用户，快去买买买吧！！！")
+                if (vo.assignmentName === "关注超市优选店铺") {
+                    $.log(`\n去做${vo.assignmentName}任务`)
+                    if (vo.assignmentTimesLimit != vo.completionCnt) {
+                        for (const vi of vo.ext) {
+                            if (vi.status === 1) {
+                                await task('smt_newFission_doAssignment', `{"projectId":"${$.projectId}","assignmentId":"${vo.assignmentId}","itemId":"${vi.itemId}","type":"${vo.type}"}`)
+                                await $.wait(1000);
+                            }
+                        }
+                    } else {
+                        console.log(`任务：${vo.assignmentName}已完成`)
+                    }
+                }
+                else if (vo.assignmentName === "逛超市精选会场") {
+                    $.log(`\n去做${vo.assignmentName}任务`)
+                    if (vo.assignmentTimesLimit != vo.completionCnt) {
+                        for (const vi of vo.ext) {
+                            if (vi.status === 1) {
+                                await task('smt_newFission_doAssignment', `{"projectId":"${$.projectId}","assignmentId":"${vo.assignmentId}","itemId":"${vi.advId}","type":"${vo.type}"}`)
+                                await $.wait(1000);
+                            }
+                        }
+                    } else {
+                        console.log(`任务：${vo.assignmentName}已完成`)
+                    }
+                }
+                else if (vo.assignmentName === "邀请好友助力") {
+                    if ($.index === 1) {
+                        if (vo.assignmentTimesLimit != vo.completionCnt) {
+                            ownCode = vo.assistId;
+                        }
+                    } else {
+                        $.log(`\n去助力${ownCode}`)
+                        await task('smt_newFission_taskFlag', `{"taskType":"2","operateType":"1","assistId":"${ownCode}"}`)
+                        if ($.canHelp) {
+                            await task('smt_newFission_doAssignment', `{"projectId":"${$.projectId}","assignmentId":"${vo.assignmentId}","itemId":"${ownCode}","type":"${vo.type}"}`)
+                        }
+                    }
+                }
             }
-        } else {
-            $.log('获取accessToken失败')
+            if ($.userBoxInfoVoList) {
+                $.log("\n去领取阶段奖励")
+                for (const vo of $.userBoxInfoVoList) {
+                    await task('smt_newFission_openBox', `{"boxId":"${vo.id}"}`)
+                }
+            }
         }
-    } else {
-        $.log('获取Token失败')
-    }
+    } else { console.log("活动火爆啦！") };
 }
 
-async function task(function_id, body) {
-    return new Promise(async resolve => {
+function task(function_id, body) {
+    return new Promise(resolve => {
         $.get(taskUrl(function_id, body), async (err, resp, data) => {
             try {
-                if (data) {
+                if (err) {
+                    $.log(err)
+                } else {
                     data = JSON.parse(data);
                     switch (function_id) {
-                        case 'get_exchange':
-                            $.exchangeList = data;
-                            if (data.status_code === 403) {
+                        case 'smt_newFission_index':
+                            if (data.result) {
+                                $.projectId = data.result.projectId;
+                                $.tasklist = data.result.taskInfoList;
+                                $.userBoxInfoVoList = data.result.userBoxInfoVoList;
+                            }
+                            if (data.code === '188') {
                                 $.hotFlag = true;
                             }
                             break;
-                        default:
-                            $.log(JSON.stringify(data))
+                        case 'smt_newFission_doAssignment':
+                            if (data.result.subCode === "0") {
+                                console.log("任务完成！")
+                            } else {
+                                console.log(JSON.stringify(data));
+                            }
                             break;
-                    }
-                } else {
-                    $.log(JSON.stringify(data))
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-    })
-}
-function taskPost(function_id, body) {
-    return new Promise(async resolve => {
-        $.post(taskPostUrl(function_id, body), async (err, resp, data) => {
-            try {
-                if (data) {
-                    data = JSON.parse(data);
-                    if (data) {
-                        switch (function_id) {
-                            case 'jd-user-info':
-                                $.accessToken = data.access_token;
-                                $.tokenType = data.token_type;
-                                break;
-                            case 'do_exchange':
-                                if (data.prize) {
-                                    console.log(`兑换成功：数量${data.prize.setting.beans_count}`)
-                                } else {
-                                    console.log(JSON.stringify(data))
-                                }
-                                break;
-                            default:
-                                $.log(JSON.stringify(data))
-                                break;
-                        }
-                    } else {
-                        $.log(JSON.stringify(data))
+                        case 'smt_newFission_openBox':
+                            if (data.result.status === 1) {
+                                console.log(`领取成功，获得${data.result.beanCount}豆子`)
+                            } else {
+                                console.log(JSON.stringify(data));
+                            }
+                            break;
+                        case 'smt_newFission_taskFlag':
+                            if (data.result.assistFlag === '2') {
+                                $.canHelp = false
+                                console.log(`助力失败,每天只能助力一次`)
+                            }
+                            break;
+                        default:
+                            console.log(JSON.stringify(data));
+                            break;
                     }
                 }
             } catch (error) {
@@ -141,76 +165,21 @@ function taskPost(function_id, body) {
         })
     })
 }
-
-function taskPostUrl(function_id, body) {
+function taskUrl(function_id, body) {
     return {
-        url: `https://ddsj-dz.isvjcloud.com/dd-api/${function_id}`,
-        body: body,
-        headers: {
-            "Host": "ddsj-dz.isvjcloud.com",
-            "Accept": "application/json, text/plain, */*",
-            "Authorization": `Bearer undefined` ? `${$.tokenType} ${$.accessToken}` : '',
-            "Accept-Encoding": "gzip, deflate, br",
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Origin": "https://ddsj-dz.isvjcloud.com",
-            "User-Agent": UA,
-            "Connection": "keep-alive",
-            "Referer": "https://ddsj-dz.isvjcloud.com/dd-world/logined_jd/",
-        }
-    }
-}
-
-function taskUrl(function_id) {
-    return {
-        url: `https://ddsj-dz.isvjcloud.com/dd-api/${function_id}`,
-        headers: {
-            "Host": "ddsj-dz.isvjcloud.com",
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Connection": "keep-alive",
-            "Accept": "application/json, text/plain, */*",
-            "Referer": "https://ddsj-dz.isvjcloud.com/dd-world",
-            "Accept-Language": "zh-cn",
-            "User-Agent": UA,
-            "Authorization": `${$.tokenType} ${$.accessToken}`,
-        }
-    }
-}
-
-function getToken() {
-    let opt = {
-        url: 'https://api.m.jd.com/client.action?functionId=isvObfuscator',
-        body: 'body=%7B%22url%22%3A%20%22https%3A//ddsj-dz.isvjcloud.com%22%2C%20%22id%22%3A%20%22%22%7D&uuid=a33e70272a9d40cb8882636a62b7d74b&client=apple&clientVersion=10.1.2&st=1633835551000&sv=102&sign=82cfbcbc4c7c0b55b18c5c01f62aeccc',
+        url: `https://api.m.jd.com/client.action?functionId=${function_id}&body=${body}&clientVersion=10.0.1&appid=smtTimeLimitFission`,
         headers: {
             "Host": "api.m.jd.com",
-            "Content-Type": "application/x-www-form-urlencoded",
             "Accept": "*/*",
             "Connection": "keep-alive",
-            "User-Agent": "JD4iPhone/167541 (iPhone; iOS 13.5; Scale/3.00)",
+            "User-Agent": UA,
+            "Accept-Language": "zh-cn",
+            "Referer": "https://h5.m.jd.com/babelDiy/Zeus/3fCUZv7USx24U1zzhLdFV4oDQ37b/index.html",
             "Accept-Encoding": "gzip, deflate, br",
+            "Content-Type": "text/plain",
             "Cookie": cookie,
         }
     }
-    return new Promise(resolve => {
-        $.post(opt, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(err)
-                } else {
-                    data = JSON.parse(data);
-                    if (data) {
-                        $.token = data.token;
-                    } else {
-                        $.log('京东返回了空数据')
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
 }
 
 // prettier-ignore

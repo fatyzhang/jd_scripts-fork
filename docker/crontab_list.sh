@@ -6,6 +6,15 @@
 */1 * * * * sh rm -rf jd_cleancart.js
 #环游记
 18 * * * * node /scripts/jd_hyj.js >> /scripts/logs/jd_hyj.log 2>&1
+10 10,16,18 * * * node /scripts/jd_fcdyj.js >> /scripts/logs/jd_fcdyj.log 2>&1
+10 11,17,19 * * * node /scripts/jd_kyd.js >> /scripts/logs/jd_kyd.log 2>&1
+10 13,15,20 * * * node /scripts/jd_lol.js >> /scripts/logs/jd_lol.log 2>&1
+#开卡
+15 12 * * * node /scripts/jd_opencard43.js >> /scripts/logs/jd_opencard43.log 2>&1
+15 12 * * * node /scripts/jd_opencard46.js >> /scripts/logs/jd_opencard46.log 2>&1
+15 12 * * * node /scripts/jd_opencard47.js >> /scripts/logs/jd_opencard47.log 2>&1
+15 12 * * * node /scripts/jd_opencard48.js >> /scripts/logs/jd_opencard48.log 2>&1
+
 #美妆馆选品官
 27 9,10 * * * node /scripts/jd_selectionOfficer.js >> /scripts/logs/jd_selectionOfficer.log 2>&1
 # 极速版红包
@@ -82,6 +91,15 @@
 22 0,8 * * * node /scripts/jd_GoldcoinToGift.js >> /scripts/logs/jd_GoldcoinToGift.log 2>&1
 #魔方兑换
 0 0 * * * node /scripts/jd_mofang_exchange.js >> /scripts/logs/jd_mofang_exchange.log 2>&1
+# 手机狂欢城
+0 0-18/6,21 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
+# 手机狂欢城助力
+10 0,21 * * * node /scripts/jd_carnivalcity_help.js >> /scripts/logs/jd_carnivalcity_help.log 2>&1
+# 电竞预言家
+20 0 * * * node /scripts/jd_djyyj.js >> /scripts/logs/jd_djyyj.log 2>&1
+# 潮玩儿制躁团
+30 11,22 * * * node /scripts/jd_zzt.js >> /scripts/logs/jd_zzt.log 2>&1
+
 ##############长期活动##############
 # 签到
 0 0,18 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
@@ -144,8 +162,6 @@
 10 11 * * * node /scripts/jd_jdzz.js >> /scripts/logs/jd_jdzz.log 2>&1
 # 宠汪汪邀请助力
 10 10-20/2 * * * node /scripts/jd_joy_run.js >> /scripts/logs/jd_joy_run.log 2>&1
-# crazyJoy自动每日任务
-10 7 * * * node /scripts/jd_crazy_joy.js >> /scripts/logs/jd_crazy_joy.log 2>&1
 # 京东汽车旅程赛点兑换金豆
 0 0 * * * node /scripts/jd_car_exchange.js >> /scripts/logs/jd_car_exchange.log 2>&1
 # 导到所有互助码
@@ -176,8 +192,6 @@
 0 0,8,16 * * *  node /scripts/jd_reward_joy.js >> /scripts/logs/jd_reward_joy.log 2>&1
 # 宠汪汪积分兑换就有版
 58 7,15,23 * * * node /scripts/jd_joy_reward_Mod.js >> /scripts/logs/jd_joy_reward_Mod.log 2>&1
-# 京东疯狂的JOY挂机
-5 5 */2 * *  node /scripts/jd_crazy_joy_coin.js >> /scripts/logs/jd_crazy_joy_coin.log 2>&1
 # 京东摇一摇
 0 1,17 * * *   node /scripts/jd_shake.js >> /scripts/logs/jd_shake.log 2>&1
 # 店铺签到
