@@ -1,7 +1,3 @@
-if (!["card","car"].includes(process.env.FS_LEVEL)) {
-    console.log("请设置通用加购/开卡环境变量FS_LEVEL为\"car\"(或\"card\"开卡+加购)来运行加购脚本")
-    return
-}
 /**
  电竞预言家瓜分京豆，链接： u.jd.com/3wyVFhp
  必须得做完任务才能参与竞猜，有加购，没开卡，参与竞猜后，如果猜对了，第二天可以瓜分京豆（蚊子腿。。。）
@@ -12,6 +8,7 @@ if (!["card","car"].includes(process.env.FS_LEVEL)) {
  */
 const $ = new Env('电竞预言家');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 // 环境变量：ANSWERCODE, 选择哪一个队伍,默认随机； 例：ANSWERCODE="A" 选择第一个队伍，ANSWERCODE="B" 选择第二个队伍
 let answerCode = $.isNode() ? (process.env.ANSWERCODE ? process.env.ANSWERCODE : `999`):`999`;
@@ -216,7 +213,7 @@ async function takeRequest(cookie,body){
                 }
             } catch (e) {
                 console.log(data);
-                $.logErr(e, resp)
+                //$.logErr(e, resp)
             } finally {
                 resolve(data.data || {});
             }

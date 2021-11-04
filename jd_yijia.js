@@ -1,3 +1,7 @@
+if (!["card","car"].includes(process.env.FS_LEVEL)) {
+    console.log("请设置通用加购/开卡环境变量FS_LEVEL为\"car\"(或\"card\"开卡+加购)来运行加购脚本")
+    return
+}
 /*
 * 活动：一加手机京东自营官方旗舰店---->左侧浮窗
 * https://lzdz1-isv.isvjcloud.com/dingzhi/yijia/collectvalue/activity/dz2109100000194701?activityId=dz2109100000194701&shareUuid=
@@ -5,7 +9,7 @@
 * 说明：
 * 1、脚本加密，概率抽到豆子，蚊子腿，纯看脸，愿意跑的跑
 * 2、没有内助作者码，脚本内随机助力；
-cron 10 14 * * * jd_yijia.js
+cron 10 14 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_yijia.js
 * * */
 const $ = new Env('一加');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

@@ -4,8 +4,7 @@
 * 活动时间：2021-10-11 12:44 至 2021-11-10 12:44；
 * 说明：
 * 1、脚本没有助力,关注店铺后抽奖3次。概率豆子
-*
-* 11 12 * * * jd_lucky_egg.js
+cron 24 9 * 10-11 *
 * * */
 const $ = new Env('幸运扭蛋');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
