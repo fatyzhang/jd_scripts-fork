@@ -3,6 +3,7 @@ cron 14 10 * * * https://raw.githubusercontent.com/smiek2121/scripts/master/jd_s
 只支持nodejs环境
 需要安装依赖 
 npm i png-js 或者 npm i png-js -S
+
 如果 read ECONNRESET 错误 可以试试
 环境变量 JOY_HOST
 修改域名 https://jdjoy.jd.com 可以改成ip https://49.7.27.236

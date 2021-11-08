@@ -5,3 +5,6 @@ jd_jddj_collectWater.js
 jd_read.js
 jx_mc_coin.js
 jd_fcwb.js
+jd_jddj_plantBeans.js
+jd_jddj_bean.js
+jd_super_redrain.js
