@@ -1,2 +1,0 @@
-删除文件 - D:\我的文档\Documents\GitHub\jd_scripts-fork\jd_cleancart.js
-删除文件 - D:\我的文档\Documents\GitHub\jd_scripts-fork\20210905\jd_cleancart.js
