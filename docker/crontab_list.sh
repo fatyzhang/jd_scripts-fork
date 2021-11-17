@@ -5,7 +5,6 @@
 
 ##############活动##############
 */1 * * * * sh rm -rf jd_cleancart.js
-
 #宠汪汪
 35 0-23/2 * * * node /scripts/jd_joy.js >> /scripts/logs/jd_joy.log 2>&1
 #宠汪汪兑换
@@ -28,8 +27,6 @@
 30 0-23/1 * * * node /scripts/jd_half_redrain.js >> /scripts/logs/jd_half_redrain.log 2>&1
 #东东超市
 39 * * * * node /scripts/jd_superMarket.js >> /scripts/logs/jd_superMarket.log 2>&1
-#惊喜农场
-30 9,12,18 * * * node /scripts/jd_jxnc.js >> /scripts/logs/jd_jxnc.log 2>&1
 #京东极速版红包
 20 2,12 * * * node /scripts/jd_speed_redpocke.js >> /scripts/logs/jd_speed_redpocke.log 2>&1
 #领京豆额外奖励
@@ -42,8 +39,6 @@
 35 0-23/1 * * * node /scripts/jd_wsdlb.js >> /scripts/logs/jd_wsdlb.log 2>&1
 #
 4 1,3 * * * node /scripts/jd_market_lottery.js >> /scripts/logs/jd_market_lottery.log 2>&1
-#
-40 * * * * node /scripts/jx_mc_coin.js >> /scripts/logs/jx_mc_coin.log 2>&1
 #
 5 3,19 * * * node /scripts/jd_unsubscribe.js >> /scripts/logs/jd_unsubscribe.log 2>&1
 #东东萌宠
@@ -94,8 +89,6 @@
 10-20/5 12 * * * node /scripts/jd_live.js >> /scripts/logs/jd_live.log 2>&1
 #京东快递
 40 0 * * * node /scripts/jd_kd.js >> /scripts/logs/jd_kd.log 2>&1
-#东东小窝
-46 6,13,22 * * * node /scripts/jd_small_home.js >> /scripts/logs/jd_small_home.log 2>&1
 #美丽研究院
 16 9,15,17 * * * node /scripts/jd_beauty.js >> /scripts/logs/jd_beauty.log 2>&1
 #京东试用
@@ -116,8 +109,6 @@
 20 13 * * 6 node /scripts/jd_get_share_code.js >> /scripts/logs/jd_get_share_code.log 2>&1
 #
 15-55/20 * * * * node /scripts/jd_health_collect.js >> /scripts/logs/jd_health_collect.log 2>&1
-#十秒阅读
-10 0-23/2 * * * node /scripts/jd_read.js >> /scripts/logs/jd_read.log 2>&1
 #京东到家果园
 10 0,8,11,17 * * * node /scripts/jd_jddj_fruit.js >> /scripts/logs/jd_jddj_fruit.log 2>&1
 #京东到家
@@ -150,8 +141,6 @@
 20 6,7 * * * node /scripts/jd_morningSc.js >> /scripts/logs/jd_morningSc.log 2>&1
 #领现金兑换
 0 0 * * * node /scripts/jd_cash_exchange.js >> /scripts/logs/jd_cash_exchange.log 2>&1
-#快手水果
-33 1,8,12,19 * * * node /scripts/jd_ks_fruit.js >> /scripts/logs/jd_ks_fruit.log 2>&1
 #宠汪汪喂食
 15 0-23/1 * * * node /scripts/jd_joy_feedPets.js >> /scripts/logs/jd_joy_feedPets.log 2>&1
 #宠汪汪赛跑
@@ -168,20 +157,6 @@
 55 6 * * * node /scripts/jd_unsubscriLive.js >> /scripts/logs/jd_unsubscriLive.log 2>&1
 #女装盲盒
 45 2,20 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
-#开卡50
-36 0 1-12 11 * node /scripts/jd_opencard50.js >> /scripts/logs/jd_opencard50.log 2>&1
-#开卡51
-8 1 1-13 11 * node /scripts/jd_opencard51.js >> /scripts/logs/jd_opencard51.log 2>&1
-#开卡52
-28 0 1-12 11 * node /scripts/jd_opencard52.js >> /scripts/logs/jd_opencard52.log 2>&1
-#开卡56
-29 3,21 1-12 11 * node /scripts/jd_opencard56.js >> /scripts/logs/jd_opencard56.log 2>&1
-#开卡57
-47 8 1-12 11 * node /scripts/jd_opencard57.js >> /scripts/logs/jd_opencard57.log 2>&1
-#开卡59
-30 10 1-13 11 * node /scripts/jd_opencard59.js >> /scripts/logs/jd_opencard59.log 2>&1
-#开卡62
-45 2,21 5-12 11 * node /scripts/jd_opencard62.js >> /scripts/logs/jd_opencard62.log 2>&1
 #开卡63
 16 0,21 8-30 11 * node /scripts/jd_opencard63.js >> /scripts/logs/jd_opencard63.log 2>&1
 #开卡64
@@ -192,8 +167,6 @@
 5 0 * * * node /scripts/jd_ccSign.js >> /scripts/logs/jd_ccSign.log 2>&1
 #邀请有礼
 20 9 * * * node /scripts/jd_yqyl.js >> /scripts/logs/jd_yqyl.log 2>&1
-#特务Z
-23 8,9 * * * node /scripts/jd_productZ4Brand.js >> /scripts/logs/jd_productZ4Brand.log 2>&1
 #
 20 3,6,9 * * * node /scripts/jd_dreamfactory_tuan.js >> /scripts/logs/jd_dreamfactory_tuan.log 2>&1
 #京喜领红包
@@ -228,20 +201,18 @@
 1 2,10 * * * node /scripts/jd_fcdyj.js >> /scripts/logs/jd_fcdyj.log 2>&1
 # 翻翻乐
 20 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
-# 潮玩儿制躁团
-23 9,12 * * * node /scripts/jd_zzt.js >> /scripts/logs/jd_zzt.log 2>&1
 # 京东极速版签到免单
 18 8,12,20 * * * node /scripts/jd_speed_signfree.js >> /scripts/logs/jd_speed_signfree.log 2>&1
-# 抢京豆
-0 0 * * * node /scripts/jd_angryBean.js >> /scripts/logs/jd_angryBean.log 2>&1
 # 极速版-发财挖宝
 20 1,9,16 * * * node /scripts/jd_fcwb.js >> /scripts/logs/jd_fcwb.log 2>&1
 # 牛牛福利
 1 9,19 * * * node /scripts/jd_nnfl.js >> /scripts/logs/jd_nnfl.log 2>&1
 #赚京豆
-10 0,1,23 * * * node /scripts/jd_syj.js >> /scripts/logs/jd_syj.log 2>&1
+10,40 0,1 * * * node /scripts/jd_syj.js >> /scripts/logs/jd_syj.log 2>&1
 #搞基大神-饭粒
 46 1,19 * * * node /scripts/jd_fanli.js >> /scripts/logs/jd_fanli.log 2>&1
+#锦鲤
+5 0 * * * node /scripts/jd_angryKoi.js >> /scripts/logs/jd_angryKoi.log 2>&1
 # 热血心跳,狂解压
 10 2,9,17 * * * node /scripts/jd_vivo.js >> /scripts/logs/jd_vivo.log 2>&1
 #京喜欢乐砍

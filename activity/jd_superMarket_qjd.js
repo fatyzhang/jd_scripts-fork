@@ -1,10 +1,11 @@
 /*
 * 活动：APP - 京东超市 - 限时抢京豆
 * 第一个CK助力作者，其他CK助力第一个CK
-cron 23 7,9 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_xsljd.js
+cron 11 0,9 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_xsqjd.js
 * */
 const $ = new Env('限时抢京豆');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [];
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
@@ -34,16 +35,9 @@ let autoCode = '',projectId = '',helpId = '';
     let res = [];
     try{res = await getAuthorShareCode('https://raw.githubusercontent.com/lsh26/share_code/main/shop.json');}catch (e) {}
     if(!res){
-        try{res = await getAuthorShareCode('https://raw.fastgit.org/lsh26/share_code/main/shop.json');}catch (e) {}
+        try{res = await getAuthorShareCode('https://gitee.com/star267/share-code/raw/master/shop.json');}catch (e) {}
         if(!res){res = [];}
     }
-    let res2 = [];
-    try{res2 = await getAuthorShareCode('https://raw.githubusercontent.com/zero205/updateTeam/main/shareCodes/shop.json');}catch (e) {}
-    if(!res2){
-        try{res2 = await getAuthorShareCode('https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/shop.json');}catch (e) {}
-        if(!res2){res2 = [];}
-    }
-    res = [...res,...res2]
     if(res.length > 0){
         autoCode = getRandomArrayElements(res,1)[0];
     }
@@ -169,7 +163,7 @@ async function takeRequest(functionId,body,ck){
             'Accept' : `application/json`,
             'Origin' : `https://h5.m.jd.com`,
             'Cookie' : ck,
-            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+            'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
             'Accept-Language' : `zh-cn`,
             'Referer' : `https://h5.m.jd.com/babelDiy/Zeus/3fCUZv7USx24U1zzhLdFV4oDQ37b/index.html`
         }
@@ -184,7 +178,7 @@ async function takeRequest(functionId,body,ck){
                 }
             } catch (e) {
                 console.log(data);
-                $.logErr(e, resp)
+                //$.logErr(e, resp)
             } finally {
                 resolve(data.result || {});
             }
