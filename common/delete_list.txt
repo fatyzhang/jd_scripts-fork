@@ -8,3 +8,4 @@ jd_fcwb.js
 jd_jddj_plantBeans.js
 jd_jddj_bean.js
 jd_cleancart.js
+jd_super_redrain.js
