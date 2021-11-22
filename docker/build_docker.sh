@@ -29,7 +29,7 @@ remove_oldimage
 build_image
 if [ $? -eq 0 ];then
 cd ${current_path}
-docker-compose -f /root/lxk0301/docker/multis.yml up -d
+docker-compose -f /root/jd_scripts/multis.yml up -d
 break
 else
 remove_err_image
