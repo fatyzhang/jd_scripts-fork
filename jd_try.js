@@ -7,7 +7,7 @@
  * 请提前取关至少250个商店确保京东试用脚本正常运行
  *
  * @Address: https://github.com/X1a0He/jd_scripts_fixed/blob/main/jd_try_xh.js
- * @LastEditors: LiJinGang
+ * @LastEditors: X1a0He
  */
 const $ = new Env('京东试用')
 const URL = 'https://api.m.jd.com/client.action'
@@ -29,7 +29,15 @@ $.sentNum = 0;
 $.cookiesArr = []
 $.innerKeyWords =
     [
-        '小靓美','脚气','文胸','卷尺','劳拉图','种子','档案袋','癣','T恤女','中年','老太太','妇女','私处','孕妇','卫生巾','卫生条','课','培训','阴道','生殖器','肛门','狐臭','少女内衣','胸罩','洋娃娃','男孩玩具','女孩玩具','益智','少女','女性内衣','女性内裤','女内裤','女内衣','女孩','鱼饵','钓鱼','童装','吊带','黑丝','钢圈','婴儿','儿童','玩具','幼儿','娃娃','网课','网校','电商','手机壳','钢化膜','车载充电器','网络课程','女纯棉','三角裤','美少女','纸尿裤','英语','俄语','四级','六级','四六级','在线网络','在线','阴道炎','宫颈','糜烂','打底裤','手机膜','鱼','狗','猫','看房','按键贴','白玉','北海游','贝尔思力','备孕','背膜','背贴','避孕套','玻尿酸','补水','哺乳','车载充电器','打底裤','大理','档案袋','地砖','电商','钓鱼','俄语','儿童','丰胸','辅导','妇女','肛门','钢化膜','膏','宫颈','狗','购房','和田玉','红参','后膜','狐臭','活动','键盘膜','胶囊','脚气','教程','洁面','戒烟','精品课','靓美','卷尺','卡薇尔','看房','课','课程培训','老太太','丽江','联通卡','六级','螺丝','旅游','猫','美白','门票','糜烂','面膜','苗霸','男孩玩具','男用喷剂','女纯棉','女孩玩具','培训','祛斑','祛痘','软件','三角裤','三元催化','神油','神皂','生殖器','手机壳','手机膜','私处','四级','四六级','体验班','童装','万向轮','网课','网络课程','网校','卫生巾','卫生条','系统正版','鞋带','癣','延时','延时喷','眼膜','阳具','洋娃娃','钥匙','益生菌','益生元','益智','阴道炎','英语','婴儿','疣','幼儿','鱼','鱼饵','玉','玉石','玉坠','御夫王','云南旅游','孕妇','在线','在线网络','早早孕','增时','正版系统','纸尿裤','痔疮','中年','种子','手机卡','流量','梳子'
+        "幼儿园", "教程", "英语", "辅导", "培训",
+        "孩子", "小学", "成人用品", "套套", "情趣",
+        "自慰", "阳具", "飞机杯", "男士用品", "女士用品",
+        "内衣", "高潮", "避孕", "乳腺", "肛塞", "肛门",
+        "宝宝", "玩具", "芭比", "娃娃", "男用",
+        "女用", "神油", "足力健", "老年", "老人",
+        "宠物", "饲料", "丝袜", "黑丝", "磨脚",
+        "脚皮", "除臭", "性感", "内裤", "跳蛋",
+        "安全套", "龟头", "阴道", "阴部"
     ]
 //下面很重要，遇到问题请把下面注释看一遍再来问
 let args_xh = {
@@ -40,7 +48,7 @@ let args_xh = {
      * C商品原价99元，试用价1元，如果下面设置为50，那么C商品将会被加入到待提交的试用组
      * 默认为0
      * */
-    jdPrice: process.env.JD_TRY_PRICE * 1 || 35,
+    jdPrice: process.env.JD_TRY_PRICE * 1 || 0,
     /*
      * 获取试用商品类型，默认为1，原来不是数组形式，我以为就只有几个tab，结果后面还有我服了
      * 1 - 精选
@@ -82,7 +90,7 @@ let args_xh = {
      * 过滤大于设定值的已申请人数，例如下面设置的1000，A商品已经有1001人申请了，则A商品不会进行申请，会被跳过
      * 可设置环境变量：JD_TRY_APPLYNUMFILTER
      * */
-    applyNumFilter: process.env.JD_TRY_APPLYNUMFILTER * 1 || 100000,
+    applyNumFilter: process.env.JD_TRY_APPLYNUMFILTER * 1 || 10000,
     /*
      * 商品试用之间和获取商品之间的间隔, 单位：毫秒(1秒=1000毫秒)
      * 可设置环境变量：JD_TRY_APPLYINTERVAL
@@ -95,7 +103,7 @@ let args_xh = {
      * 例如是18件，将会进行第三次获取，直到过滤完毕后为20件才会停止，不建议设置太大
      * 可设置环境变量：JD_TRY_MAXLENGTH
      * */
-    maxLength: process.env.JD_TRY_MAXLENGTH * 1 || 300,
+    maxLength: process.env.JD_TRY_MAXLENGTH * 1 || 100,
     /*
      * 过滤种草官类试用，某些试用商品是专属官专属，考虑到部分账号不是种草官账号
      * 例如A商品是种草官专属试用商品，下面设置为true，而你又不是种草官账号，那A商品将不会被添加到待提交试用组
@@ -113,7 +121,7 @@ let args_xh = {
      * 不打印的缺点：无法清晰知道每个商品为什么会被过滤，哪个商品被添加到了待提交试用组
      * 可设置环境变量：JD_TRY_PLOG，默认为true
      * */
-    printLog: process.env.JD_TRY_PLOG || false,
+    printLog: process.env.JD_TRY_PLOG || true,
     /*
      * 白名单，是否打开，如果下面为true，那么黑名单会自动失效
      * 白名单和黑名单无法共存，白名单永远优先于黑名单
@@ -253,6 +261,12 @@ function requireConfig(){
             //IOS等用户直接用NobyDa的jd $.cookie
             $.cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
+        if(typeof process.env.JD_TRY_WHITELIST === "undefined") args_xh.whiteList = false;
+        else args_xh.whiteList = process.env.JD_TRY_WHITELIST === 'true';
+        if(typeof process.env.JD_TRY_PLOG === "undefined") args_xh.printLog = true;
+        else args_xh.printLog = process.env.JD_TRY_PLOG === 'true';
+        if(typeof process.env.JD_TRY_PASSZC === "undefined") args_xh.passZhongCao = true;
+        else args_xh.passZhongCao = process.env.JD_TRY_PASSZC === 'true';
         for(let keyWord of $.innerKeyWords) args_xh.titleFilters.push(keyWord)
         console.log(`共${$.cookiesArr.length}个京东账号\n`)
         console.log('=====环境变量配置如下=====')

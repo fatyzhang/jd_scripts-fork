@@ -4,8 +4,8 @@ cron 10 2,9,17 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/j
 PS:无开卡，有加购，蚊子推豆子，活动结束可以瓜分
 * */
 const $ = new Env('热血心跳,狂解压');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [];
 Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -27,13 +27,6 @@ $.shareUuid = '';
         try{res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/lsh26/share_code@main/vivo.json');}catch (e) {}
         if(!res){res = [];}
     }
-    let res2 = [];
-    try{res2 = await getAuthorShareCode('https://raw.githubusercontent.com/zero205/updateTeam/main/shareCodes/vivo.json');}catch (e) {}
-    if(!res2){
-        try{res2 = await getAuthorShareCode('https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/vivo.json');}catch (e) {}
-        if(!res2){res2 = [];}
-    }
-    res = [...res, ...res2]
     if(res.length > 0){
         $.shareUuid = getRandomArrayElements(res,1)[0];
     }
@@ -144,13 +137,13 @@ async function doTask(){
     }else{
         console.log(`已关注`);
     }
-    if(!$.activityData.addCartStatus && ['car','card'].includes(process.env.FS_LEVEL)){
+    if(!$.activityData.addCartStatus){
         console.log(`去执行加购`);
         $.taskType=21;
         await takePostRequest('saveTask');
         await $.wait(1000);
     }else{
-        console.log(`已执行加购或未设置FS_LEVEL`);
+        console.log(`已执行加购`);
     }
     let toMainData = $.activityData.toMainData;
     for (let i = 0; i < toMainData.length; i++) {
@@ -210,7 +203,7 @@ function takePostRequest(type) {
             break;
         case 'insxintiao':
             url= 'https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/insxintiao';
-            body = `pin=${encodeURIComponent(pin)}&activityId=${activityID}&playerId=39`;
+            body = `pin=${encodeURIComponent(pin)}&activityId=${activityID}&playerId=37`;
             break;
         case 'draw':
             url= 'https://lzdz1-isv.isvjd.com/dingzhi/vivo/iqoojieyapa/draw';
