@@ -1,6 +1,6 @@
 jd_half_redrain.js
 jd_jddj_getPoints.js
-jd_superMarket.js
+#jd_superMarket.js
 jd_jddj_collectWater.js
 jd_read.js
 jx_mc_coin.js
