@@ -2,6 +2,7 @@
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf
 #收集助力码
 30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /scripts/logs/auto_help_collect.log 2>&1
+0 */4 * * * sh /scripts/docker/rsync_eicky.sh
 
 ##############活动##############
 
