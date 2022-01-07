@@ -1,6 +1,6 @@
 #!/bin/sh
 cd /scripts/
-git clone https://github.com.cnpmjs.org/eicky/jd_scripts.git
+git clone https://github.com.cnpmjs.org/LingFeng0918/jd_scripts.git
 cd jd_scripts
 ls |egrep -v "md|Loon|docker|myCrontab|QuantumultX|Surge|clean_car"|xargs -I {} cp -rf {} ../
 cp -rf docker/crontab_list.sh /scripts/docker/crontab_list.sh
