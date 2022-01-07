@@ -1,15 +1,12 @@
 /*
 京东我的理想家，可抽奖获得京豆，
-活动入口：京东我的理想家 https://u.jd.com/nw7Fv3T 旁边的立即抽奖
-by:小手冰凉 tg:@chianPLA
-交流群：https://t.me/jdPLA2
+活动入口：京东-我的理想家-旁边的立即抽奖
 脚本更新时间：2021-12-7 14:20
 脚本兼容: Node.js
-新手写脚本，难免有bug，能用且用。
 ============Quantumultx===============
 [task_local]
 #京东我的理想家
-10 7 * * * jd jd_lxLottery.js, tag=京东我的理想家, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_lxLottery.png, enabled=true
+6 7 * * * jd jd_lxLottery.js, tag=京东我的理想家, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_lxLottery.png, enabled=true
 
  */
 const $ = new Env('京东我的理想家');
@@ -99,10 +96,6 @@ async function run() {
             if (vo.hasFinish === true) {
                 console.log(`任务${vo.taskName}，已完成`);
                 continue;
-            }
-            if (vo.taskName.includes('加购') && !['card','car'].includes(process.env.FS_LEVEL)) {
-                console.log('默认跳过加购,请设置通用加购/开卡变量FS_LEVEL为car(加购)或card(开卡+加购)')
-                continue
             }
             console.log(`开始做${vo.taskName}:${vo.taskItem.itemName}`);
             await doTask(vo.taskType, vo.taskItem.itemId);

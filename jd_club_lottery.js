@@ -7,7 +7,19 @@ Last Modified time: 2021-5-11 09:27:09
 Modified from https://github.com/Zero-S1/JD_tools/blob/master/JD_vvipclub.py
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-cron "15 2,19 * * *" jd_club_lottery.js
+============QuantumultX==============
+[task_local]
+#摇京豆
+5 0,23 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_club_lottery.js, tag=摇京豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdyjd.png, enabled=true
+=================Loon===============
+[Script]
+cron "5 0,23 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_club_lottery.js,tag=摇京豆
+=================Surge==============
+[Script]
+摇京豆 = type=cron,cronexp="5 0,23 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_club_lottery.js
+
+============小火箭=========
+摇京豆 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_club_lottery.js, cronexpr="5 0,23 * * *", timeout=3600, enable=true
 */
 
 const $ = new Env('摇京豆');
@@ -134,7 +146,7 @@ async function clubLottery() {
     await shakeSign();//京东会员签到
     await superShakeBean();//京东APP首页超级摇一摇
     await superbrandShakeBean();//京东APP首页超级品牌日
-    await mofang();//小魔方
+    //await mofang();//小魔方
   } catch (e) {
     $.logErr(e)
   }

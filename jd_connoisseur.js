@@ -6,17 +6,17 @@
 ============Quantumultx===============
 [task_local]
 #内容鉴赏官
-15 3,6 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js, tag=内容鉴赏官, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+15 3,6 * * * jd_connoisseur.js, tag=内容鉴赏官, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "15 3,6 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js,tag=内容鉴赏官
+cron "15 3,6 * * *" script-path=jd_connoisseur.js,tag=内容鉴赏官
 
 ===============Surge=================
-内容鉴赏官 = type=cron,cronexp="15 3,6 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js
+内容鉴赏官 = type=cron,cronexp="15 3,6 * * *",wake-system=1,timeout=3600,script-path=jd_connoisseur.js
 
 ============小火箭=========
-内容鉴赏官 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js, cronexpr="15 3,6 * * *", timeout=3600, enable=true
+内容鉴赏官 = type=cron,script-path=jd_connoisseur.js, cronexpr="15 3,6 * * *", timeout=3600, enable=true
  */
 const $ = new Env('内容鉴赏官');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -43,12 +43,7 @@ let allMessage = '';
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    // let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/connoisseur.json')
-    // if (!res) {
-    //   $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/connoisseur.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-    //   await $.wait(1000)
-    //   res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/connoisseur.json')
-    // }
+    let res = [{"use":"18237091240_p","code":"Sv_VxQxkZ_FXVJBqb1A"},{"use":"pluto.5218_m","code":"S_qE2BEEH8FbWKHWp"}, {"use":"jd_50f2be46743fc","code":"S5KkcRR5P9waCJBzzkPRcJw"},{"use":"15082992273_p","code":"Sv_hzSBwQ_FbVJxmb1A"},{"use":"jd_680c996309fbf","code":"S5KkcRhYZpl3eJhn0naFYIg"},{"use":"jd_5cd15c4b0807c","code":"S5KkcRU1N9FGEJEj0nPcNJw"},{"use":"jd_TTcYfwuzDbnh","code":"S5KkcJHpKnAKQZVCAxqlS"},{"use":"%E6%B8%B8%E6%9E%97yl","code":"SaHX7lrC-vAg"},{"use":"jd_544cacc7b14ef","code":"S5KkcRRodpgWEcx2mlfNfIg"},{"use":"313333079-954679","code":"SvfxwQx0a9VPePRPxkPENfQ"}]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
