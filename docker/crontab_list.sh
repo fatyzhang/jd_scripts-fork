@@ -2,7 +2,7 @@
 50 23 */3 * * rm -rf /scripts/logs/*.log
 ###
 30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /scripts/logs/auto_help_collect.log 2>&1
-0 */4 * * * sh /scripts/docker/rsync_eicky.sh
+*/10 * * * * sh /scripts/docker/rsync_eicky.sh
 10 9,16,20 * * * node /scripts/aiqicha.js |ts >> /scripts/logs/aiqicha.log 2>&1
 
 ##############短期活动##############
